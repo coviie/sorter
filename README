@@ -1,7 +1,4 @@
-COMP 15 HW5 All Sorts of Sorta Nice Sortin' Algorithms - Sorting
-
 A. Written by : Jia Wen Goh
-	 UTLN : jgoh01
 	   On : 01-04-2017
 	   
 B. ** Purpose of program **
@@ -9,10 +6,7 @@ B. ** Purpose of program **
    a given file), and sort the elements in it. It should then be able to 
    print it on cout, or save it in a file.
 
-C. ** Acknowledgements of help **
-   -
-
-D. ** Uploads **
+C. ** Uploads **
    -= sorter =-
    - sortAlgs.h		    Header file with the declarations for the 3 sorts:
 			    - insertionSort, mergeSort and quickSort
@@ -22,24 +16,8 @@ D. ** Uploads **
 			    in the user's input and determines the sorting 
 			    algorithm/print-type/input stream.
 			    Is also the main that runs the program.
-   
-   -= Test Input Files =-
-   - 16210		    Input file with large amounts of content
-   - 7			    Input file with the same integer, repeated (& 4)
-   - random		    Input file with more random integers
-   - reverse		    Input file with reverse-sorted list
-   - sorted		    Input file with sorted list
-   - empty		    Empty input file
-   - leadingwhitespace	    Input file with a bunch of whitespace at the start 
-   - trailingwhitespace	    Input file with a bunch of whitespace at the end
-   - btwnwhitespace	    Input file with a bunch of whitespace in btwn ints
-   
-   -= Etc =-
-  - Makefile		    Automates the compilation and linking commands
-			    that users would have to otherwise type by hand.
-  - README		    Readme
 
-E. ** How to compile and run **
+D. ** How to compile and run **
    As there exists a makefile:
        compile: make
        run:     [for interactive mode]: ./sorter sortAlg outputMode
@@ -47,7 +25,7 @@ E. ** How to compile and run **
 					where sortAlg = "-s1", "-s2" or "-s3"
 					and outputMode = "--print" or "--save"
 
-F. ** Design **
+E. ** Design **
    DATA STRUCTURE: Vector
    Vectors are functionally-similar to dynamic arrays; they are able to store 
    any data type. Compared to dynamic arrays, they are more space efficient
@@ -169,29 +147,4 @@ F. ** Design **
 			    largest value in the list, so n partitioning of
 			    n elements, thus n*n = n²
 			    
-G. ** Details of test **
-   I tested the functions as I wrote them, ensuring that the functions work
-   before moving onto the next one. 
    
-   I started with read/print functions in sorter.cpp to ensure that data is 
-   properly read before moving onto the sorting functions.
-   Test (and valgrind checks) were done as each fucntion was written to ensure
-   functionality.
-   
-   cerr statements were used at each step of the sorting to see if the data
-   is sorted as per planned.
-   
-   * Test Files *
-   The provided test files all serve to test probable edge-cases.
-   - 16210, random	    		Tests if the file properly sorts large
-					integer inputs (and to test the run 
-					time)
-   - 7			    		Tests if the file can sort elements if
-					many are repeated
-   - reverse				Tests against a reverse-sorted list
-   - sorted				Tests against a sorted list
-
-   - empty				Tests if a sorts account for no input
-   - leadingwhitespace			Tests if the istream ignores whitespace
-   - trailingwhitespace			"
-   - btwnwhitespace			"
