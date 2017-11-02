@@ -1,0 +1,197 @@
+COMP 15 HW5 All Sorts of Sorta Nice Sortin' Algorithms - Sorting
+
+A. Written by : Jia Wen Goh
+	 UTLN : jgoh01
+	   On : 01-04-2017
+	   
+B. ** Purpose of program **
+   The program should be able to read in a file (either from cin or from
+   a given file), and sort the elements in it. It should then be able to 
+   print it on cout, or save it in a file.
+
+C. ** Acknowledgements of help **
+   -
+
+D. ** Uploads **
+   -= sorter =-
+   - sortAlgs.h		    Header file with the declarations for the 3 sorts:
+			    - insertionSort, mergeSort and quickSort
+   - sortAlgs.cpp	    Definitions of the sorts, with accompanying helper
+			    functions
+   - sorter.cpp		    File that contains the end-user interface. Reads 
+			    in the user's input and determines the sorting 
+			    algorithm/print-type/input stream.
+			    Is also the main that runs the program.
+   
+   -= Test Input Files =-
+   - 16210		    Input file with large amounts of content
+   - 7			    Input file with the same integer, repeated (& 4)
+   - random		    Input file with more random integers
+   - reverse		    Input file with reverse-sorted list
+   - sorted		    Input file with sorted list
+   - empty		    Empty input file
+   - leadingwhitespace	    Input file with a bunch of whitespace at the start 
+   - trailingwhitespace	    Input file with a bunch of whitespace at the end
+   - btwnwhitespace	    Input file with a bunch of whitespace in btwn ints
+   
+   -= Etc =-
+  - Makefile		    Automates the compilation and linking commands
+			    that users would have to otherwise type by hand.
+  - README		    Readme
+
+E. ** How to compile and run **
+   As there exists a makefile:
+       compile: make
+       run:     [for interactive mode]: ./sorter sortAlg outputMode
+                [for automated mode]:   ./sorter sortAlg outputMode [filename]
+					where sortAlg = "-s1", "-s2" or "-s3"
+					and outputMode = "--print" or "--save"
+
+F. ** Design **
+   DATA STRUCTURE: Vector
+   Vectors are functionally-similar to dynamic arrays; they are able to store 
+   any data type. Compared to dynamic arrays, they are more space efficient
+   (as the size is only as big as needed as it expands/shrinks when elements 
+   are added/removed), and they have their own functions (e.g. .push_back())
+   which allows for much easier management (e.g. to find size, just .size())
+   rather than needing to iterate through the array)
+   
+   Vectors were used in sorting as they sorting requires 1. comparison of each
+   list element to another element, and 2. sorting them into the right order.
+   Vector allows easy access and swapping/shifting of such elements.
+   
+   SORTING ALGORITHMS:
+   * Insertion Sort *
+   Description: Algorithm that builds the final sorted list one item at a time.
+   Look at successive elements of the list, and sort them (by determining 
+   the position the 2nd element should be in, and shifting subsequent
+   elements back 1 place), i.e.:
+   1. Look at the 1st element of the list
+   2. Look at the 1st 2 elements of the list, and sort them 
+   3. Look at the 1st 3 elements of the list, and sort them
+   ... Repeat the above steps for successive elements till all elements are
+       sorted.
+   (e.g. 18 22 24 12 82  4 11  2
+	 18|22 24 12 82  4 11  2
+	 18 22|24 12 82  4 11  2
+	 18 22 24|12 82  4 11  2
+	 12 18 22 24|82  4 11  2
+	 12 18 22 24 82| 4 11  2
+	  4 12 18 22 24 82|11  2
+	  4 11 12 18 22 24 82| 2
+	  2  4 11 12 18 22 24 82)
+   
+   Big-O: [best]  O(n)  - List is already sorted
+	  [worst] O(n²) - List is reverse-sorted
+	  n  - In the best-case, there is no need to shift elements. Thus,
+	       runtime = looking at successive elements of the list.
+	  n² - In the worst-case, elements always need to be shifted when 
+	       looking at successive elements of the list. Thus, runtime =
+	       looking at successive elements (O(n)) * shifting elements (O(n))
+	  
+    * Merge Sort *
+   Description: 
+   1. The list is recursively divided into sublists till the size of each
+      sublist is 1.
+   (e.g.: 18 22 24 12 82 4 11 2
+	  18|22|24|12|82|4|11|2)
+   2. The sublists are then sorted by adding them into a new, sorted sublist;
+      When adding into the new sublist, the smallest integer between the
+      sublists are successively added (so the new sublist is sorted). 
+   (e.g.: 18 22|12 24| 4 82| 2 11
+	  12 18 22 24| 2  4 11 82
+	   2  4 11 12 18 22 24 82 - Sorted)
+   
+   Big-O: [best]  O(n log n)
+	  [worst] O(n log n)
+	  log n - Recursively dividing the list (& sublists) into 2 sublists
+	  n     - Combine step iterates through n elements, thus O(n)
+   
+    * Quick Sort *
+   Description: Divide-conquer-combine strategy similar to merge sort; create 
+   partitions, sort the sublists and append them.
+   1. Pick a pivot (in this case, the middle-most element)
+   2. Reorder the list (within the vector) such that values < pivot is to
+      the left of the pivot, while values > pivot is to the right of it.
+   3. Recursively sort sub-list of smaller (<) & greater (>) elements, i.e.
+      recursively sort left and right sublists.
+   4. Append all sublists (left sublist + pivot + right sublist)
+   (e.g. 18 22 24 12 82  4 11  2
+	 18 22 24[12]82  4 11  2  (18 > 12 > 2, so swap)
+	  2 22 24[12]82  4 11 18  (22 > 12 > 11, so swap)
+	  2 11 24[12]82  4 22 18  (24 > 12 > 4, so swap)
+	  2 11  4[12]82 24 22 18  (12 = 12 < 82, don't swap)
+	  2 11  4[12]82 24 22 18  (leftPtr>rightPtr stop partition)
+	  2[11] 4[12]82[24]22 18  (recursively partition)
+	  ... 
+	  [2][4][11]...[24][82]    (list is sorted))
+
+   Additionally, in coding quickSort, I initially coded the version that was
+   not entirely space-efficient, i.e. it created a new vector for all left and
+   right partitions.
+   
+   (code): 
+   if (intList.size() > 1) {
+		vector<int> leftList;
+		vector<int> rightList;
+
+		int pivot = intList.front();
+		for (size_t i = 1; i < intList.size(); i++) {
+			if (intList[i] < pivot)
+				leftList.push_back(intList[i]);
+			else
+				rightList.push_back(intList[i]);
+		}
+
+		quickSort(leftList);
+		quickSort(rightList);
+
+		leftList.push_back(pivot);
+		append(leftList, rightList);
+		intList = leftList;
+   }
+   
+   I decided to try sort it within the same vector to make it memory/space
+   efficient. This was done by swapping elements such that values < pivot is
+   to the left of the pivot, while values > pivot is to the right of it.
+   Moreover, this version allows for a random pivot to be called for each 
+   recursive call.
+   
+   Big-O: [best]    O(n log n) 
+	  [worst]   O(n²)
+		    n	  - Partitioning n elements
+		    log n - List is recursively divided into 2 sublists. In 
+			    the best case, this happens when partitions have
+			    n/2 and (n/2 - 1) elements
+		    n²    - If partitions are unbalanced (i.e. partitioning
+			    creates a sublists of 0 and (n-1) elements) because
+			    the pivot selected is the smallest or
+			    largest value in the list, so n partitioning of
+			    n elements, thus n*n = n²
+			    
+G. ** Details of test **
+   I tested the functions as I wrote them, ensuring that the functions work
+   before moving onto the next one. 
+   
+   I started with read/print functions in sorter.cpp to ensure that data is 
+   properly read before moving onto the sorting functions.
+   Test (and valgrind checks) were done as each fucntion was written to ensure
+   functionality.
+   
+   cerr statements were used at each step of the sorting to see if the data
+   is sorted as per planned.
+   
+   * Test Files *
+   The provided test files all serve to test probable edge-cases.
+   - 16210, random	    		Tests if the file properly sorts large
+					integer inputs (and to test the run 
+					time)
+   - 7			    		Tests if the file can sort elements if
+					many are repeated
+   - reverse				Tests against a reverse-sorted list
+   - sorted				Tests against a sorted list
+
+   - empty				Tests if a sorts account for no input
+   - leadingwhitespace			Tests if the istream ignores whitespace
+   - trailingwhitespace			"
+   - btwnwhitespace			"
